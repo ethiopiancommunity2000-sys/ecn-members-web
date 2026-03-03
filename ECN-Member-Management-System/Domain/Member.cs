@@ -31,8 +31,9 @@ namespace Domain
         public string Bio { get; set; }
         public bool IsActive { get; set; }
         public bool IsAdmin { get; set; }
-       // public DateTime RegisterDate { get; set; } = DateTime.Today;
          public string RegisterDate { get; set; } = DateTime.Today.ToString("MM/dd/yyyy");
+
+        // public DateTime RegisterDate { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
         public List<Address> Addresses { get; set; } = new();

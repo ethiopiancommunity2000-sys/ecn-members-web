@@ -69,22 +69,7 @@ function MemberForm() {
 
   //  MUST come before selectedFile
 
-  // now safe to use
-  // const selectedFile = useMemo(
-  //   () => member.memberFiles?.find(f => f.paymentId === selectedPaymentId),
-  //   [member.memberFiles, selectedPaymentId]
-  // );
 
-  // const selectedFile = useMemo(
-  //   () => memberFiles.find(f => f.paymentId === selectedPaymentId),
-  //   [member.memberFiles, selectedPaymentId]
-  // );
-
-  // useEffect(() => {
-  //   if (selectedPaymentId && !selectedFile) {
-  //     setSelectedPaymentId('');
-  //   }
-  // }, [selectedPaymentId, selectedFile]);
 
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
@@ -737,7 +722,14 @@ function MemberForm() {
 
               <Box mt={2}>
                 <TextField
-                  label="Receipt description"
+          label={
+      <Box display="flex" alignItems="center" gap={1}>
+        <span>Receipt Description</span>
+        <span style={{ fontSize: "0.8rem", color: "#fd0101" }}>
+          (Please update the payment first if this is a new payment before attaching the receipt.)
+        </span>
+      </Box>
+    }
                   value={fileDescription}
                   onChange={(e) => setFileDescription(e.target.value)}
                   fullWidth
@@ -760,19 +752,26 @@ function MemberForm() {
                       {file.name}
                     </Typography>
                   ))}
+                  {!editMode && (
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                      These files will be uploaded when you click Create Member.
+                    </Typography>
+                  )}
                 </Box>
               )}
 
-              <Box mt={2}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleUpload}
-                  disabled={files.length === 0 || !member.id}
-                >
-                  Upload Selected Files
-                </Button>
-              </Box>
+              {editMode ? (
+                <Box mt={2}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleUpload}
+                    disabled={files.length === 0 || !member.id}
+                  >
+                    Upload Selected Files
+                  </Button>
+                </Box>
+              ) : null}
             </>
           )}
 

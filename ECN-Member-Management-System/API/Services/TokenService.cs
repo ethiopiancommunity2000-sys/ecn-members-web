@@ -24,7 +24,8 @@ namespace API.Services
                 new Claim(ClaimTypes.Email, user.Email),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _config["TokenKey"] ?? "super-secret-key-that-should-be-at-least-32-characters-long-for-security"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor

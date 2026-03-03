@@ -124,8 +124,10 @@ const Members = {
   details: (id: string) =>
     requests.get<Member>(`/members/${id}`),
 
+  // Create member (with optional initial receipt files)
   create: (member: Member, files: File[] = []) =>
     createMem(member, files),
+
 
   /**
    * Update member with optional files, fileDescription, and paymentId
@@ -144,7 +146,7 @@ const Members = {
    */
   updateAndReloadFiles: async (member: Member) => {
     const updated = await updateMember(member);
-    const files = await agent.Members.getFiles(member.id);
+    const files = await agent.Members.getFiles(member?.id);
 
     return {
       ...updated,

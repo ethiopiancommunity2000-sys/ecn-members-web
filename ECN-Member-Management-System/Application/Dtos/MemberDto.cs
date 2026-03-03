@@ -12,7 +12,7 @@ namespace Application.Dtos
         public string ReceiverId { get; set; } = string.Empty;
         // public string RegisterDate { get; set; } = string.Empty;
         public string RegisterDate { get; set; } = DateTime.Today.ToString("MM/dd/yyyy");
-
+       // public DateTime RegisterDate { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsAdmin { get; set; }
 
@@ -24,6 +24,9 @@ namespace Application.Dtos
         public string FamilyMembersJson { get; set; } = string.Empty;
         public string PaymentsJson { get; set; } = string.Empty;
         public string IncidentsJson { get; set; } = string.Empty;
+
+        public decimal? InitialPaymentAmount { get; set; }
+         public string InitialPaymentReference { get; set; }
 
         // GET only
         public List<AddressDto> Addresses { get; set; } = new();
