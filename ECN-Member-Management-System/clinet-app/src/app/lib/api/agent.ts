@@ -145,8 +145,11 @@ const Members = {
    * USE THIS in forms to avoid disappearing images
    */
   updateAndReloadFiles: async (member: Member) => {
+
+    if (!member?.id)   throw new Error("Member ID is required");
     const updated = await updateMember(member);
-    const files = await agent.Members.getFiles(member?.id);
+    
+    const files = await agent.Members.getFiles(member.id);
 
     return {
       ...updated,
@@ -166,7 +169,7 @@ const Members = {
     paymentId?: string
   ) => uploadFiles(memberId, files, fileDescription, paymentId),
 
-  getFiles: (memberId: string): Promise<MemberFileDto[]> =>
+  getFiles: (memberId: string ): Promise<MemberFileDto[]> =>
     requests
       .get<MemberFileDto[]>(`/members/files/${memberId}`)
       .then((r) => Array.isArray(r) ? r : []),
