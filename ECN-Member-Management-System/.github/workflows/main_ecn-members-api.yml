@@ -1,0 +1,58 @@
+name: Build and deploy ASP.Net Core app to Azure Web App - ecn-members-api
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ./API
+
+      - name: Build API
+        run: dotnet build ./API --configuration Release --no-restore
+
+      - name: Publish API
+        run: dotnet publish ./API --configuration Release --output ./publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-app
+          path: ./publish
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: api-app
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A82D09E73C4646E199C3EF7888F2FB75 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_701C199232F949728846B08235001ABD }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_42C100C5D58A42F0825D10B1EADDEC57 }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ecn-members-api
+          slot-name: Production
+          package: .
