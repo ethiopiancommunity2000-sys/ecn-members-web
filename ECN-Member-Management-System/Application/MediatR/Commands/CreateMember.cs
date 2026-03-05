@@ -147,6 +147,7 @@ namespace Application.MediatR
 
                     member.Payments.Add(initialPayment);
                 }
+    
                 // Otherwise, if there are any payments from the form,
                 // treat the first one as the "primary" payment for initial receipts
                 else if (member.Payments != null && member.Payments.Any())
