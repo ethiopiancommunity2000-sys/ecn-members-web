@@ -2,8 +2,7 @@
   "routes": [
     {
       "route": "/*",
-      "serve": "/index.html",
-      "statusCode": 200
+      "rewrite": "/index.html"
     }
   ],
   "navigationFallback": {
@@ -11,4 +10,3 @@
     "exclude": ["/api/*", "*.{css,scss,js,png,gif,ico,jpg,svg,woff,woff2,ttf,eot}"]
   }
 }
-

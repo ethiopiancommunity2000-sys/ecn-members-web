@@ -63,7 +63,7 @@ export default function Home() {
               fontSize: { xs: '2rem', sm: '3rem', md: '4rem' },
             }}
           >
-            Welcome to ECN Network
+            Welcome to ECN Network  ECN Member System GitHub Test
           </Typography>
           <Typography
             variant="h5"
