@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    name: Build and Deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,6 +20,6 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "clinet-app"
+          app_location: "ECN-Member-Management-System/clinet-app"
           api_location: ""
           output_location: "dist"
