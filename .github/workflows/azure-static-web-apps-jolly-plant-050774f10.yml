@@ -9,28 +9,22 @@ workflow_dispatch:
 jobs:
 build_and_deploy:
 runs-on: ubuntu-latest
-name: Build and Deploy
 
 ```
 steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
+  - uses: actions/checkout@v4
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v4
+  - uses: actions/setup-node@v4
     with:
       node-version: 20
 
-  - name: Install dependencies
+  - run: npm install
     working-directory: ECN-Member-Management-System/clinet-app
-    run: npm install
 
-  - name: Build Vite application
+  - run: npm run build
     working-directory: ECN-Member-Management-System/clinet-app
-    run: npm run build
 
-  - name: Deploy to Azure Static Web Apps
-    uses: Azure/static-web-apps-deploy@v1
+  - uses: Azure/static-web-apps-deploy@v1
     with:
       azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
       repo_token: ${{ secrets.GITHUB_TOKEN }}
