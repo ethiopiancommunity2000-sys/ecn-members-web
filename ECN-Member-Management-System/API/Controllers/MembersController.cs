@@ -21,7 +21,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-       // [Authorize]
+        [Authorize]
         public async Task<ActionResult<List<MemberDto>>> GetMembers()
         {
             var result = await Mediator.Send(new GetMemberList.Query());
@@ -51,7 +51,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-      //  [Authorize]
+        [Authorize]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] CreateMember.Command command)
         {
@@ -67,7 +67,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-       // [Authorize]
+        [Authorize]
         [Consumes("multipart/form-data", "application/json")]
         public async Task<IActionResult> Edit(
             string id,
@@ -127,7 +127,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{id}")]
-      //  [Authorize]
+        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
             try
@@ -148,7 +148,7 @@ namespace API.Controllers
 
         // uploads files
         [HttpPost("uploads/{memberId}")]
-     //   [Authorize]
+        [Authorize]
         public async Task<IActionResult> UploadFiles(
             [FromRoute] string memberId,
             [FromForm] List<IFormFile> files,
@@ -187,7 +187,7 @@ namespace API.Controllers
 
 
         [HttpGet("files/{memberId}")]
-     //   [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetFiles(string memberId)
         {
             try
@@ -210,7 +210,7 @@ namespace API.Controllers
             }
         }
 
-      //  [Authorize]
+        [Authorize]
         [HttpGet("file/{id}")]
         public IActionResult GetMemberFile(Guid id)
         {
@@ -234,7 +234,7 @@ namespace API.Controllers
             );
         }
 
-     //   [Authorize]
+        [Authorize]
         [HttpDelete("file/{id}")]
         public async Task<IActionResult> DeleteFile(string id)
         {
