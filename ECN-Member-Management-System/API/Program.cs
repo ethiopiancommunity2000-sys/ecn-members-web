@@ -147,6 +147,28 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 var app = builder.Build();
 
+// Global exception handler: log and return error (exception message in Development only)
+app.UseExceptionHandler(err =>
+{
+    err.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+        var ex = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+        var logger = context.RequestServices.GetService<ILogger<Program>>();
+        if (ex != null)
+            logger?.LogError(ex, "Unhandled exception");
+        var isDev = builder.Environment.IsDevelopment();
+        var payload = JsonSerializer.Serialize(new
+        {
+            error = "An error occurred while processing your request.",
+            message = isDev && ex != null ? ex.Message : null,
+            detail = isDev && ex != null ? ex.StackTrace : null
+        });
+        await context.Response.WriteAsync(payload);
+    });
+});
+
 app.UseStaticFiles();
 
 app.UseCors(CorsPolicyName);

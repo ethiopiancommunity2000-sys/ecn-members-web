@@ -36,4 +36,9 @@ To see the exact exception instead of the generic 500.30 page:
 - App Service → **App Service logs** (under Monitoring): set **Application Logging** to **File System** or **Log Stream**, **Level** = **Information**, Save.
 - Then open **Log stream** (under Monitoring) and restart the app; the exception will appear there.
 
+## 4. If GET /api/members returns 500 (runtime)
+
+- **Log stream**: App Service → **Log stream**. Reproduce the request; the unhandled exception is logged there.
+- **Exception in response**: Temporarily set **ASPNETCORE_ENVIRONMENT** = **Development** in Application settings and restart. The API will then include the exception message and stack trace in the 500 JSON response (for debugging only; set back to **Production** when done).
+
 After setting **ConnectionStrings__ECNMembersConnection** and **TokenKey**, use **Restart** on the App Service Overview so the new config is applied.

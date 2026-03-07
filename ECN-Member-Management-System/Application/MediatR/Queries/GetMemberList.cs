@@ -27,15 +27,8 @@ namespace Application.MediatR
         }
         public async Task<Result<List<MemberDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-            // ! b/c =>ProjectTo<MemberDto> cannot execute Convert.ToBase64String -
-            //!  -in SQL. EF Core ignores it, so Base64FileData ends up null. that is why we dont't use ProjectTo()<>
-                var id = string.Empty;
-        //   var members = await _context.Members
-             //ProjectTo  === using AutoMapper.QueryableExtensions; //! this work as the same as .ProjectTo<>
-        //        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-        //        .ToListAsync(cancellationToken);
+            // Load members without MemberFiles to avoid loading binary ImageData (we attach file metadata only below)
         var members = await _context.Members
-        .Include(m => m.MemberFiles)
         .Include(m => m.Payments)
         .Include(m => m.Addresses)
         .Include(m => m.FamilyMembers)
@@ -44,30 +37,36 @@ namespace Application.MediatR
 
     var memberDtos = _mapper.Map<List<MemberDto>>(members);
 
-    // CRITICAL: Ensure all MemberFiles are included in each member's DTO
-    // Query all MemberFiles once and group by MemberId for efficiency
-    var allMemberFiles = await _context.MemberFiles
+    // Load file metadata only (exclude ImageData) to avoid large payloads and timeouts
+    var allMemberFileMetas = await _context.MemberFiles
+        .Select(f => new { f.Id, f.FileName, f.Size, f.MemberId, f.FileDescription, f.PaymentId })
         .ToListAsync(cancellationToken);
-    
-    var filesByMemberId = allMemberFiles
+
+    var filesByMemberId = allMemberFileMetas
         .GroupBy(f => f.MemberId)
         .ToDictionary(g => g.Key, g => g.ToList());
 
-    // Ensure each member DTO has its MemberFiles
     foreach (var memberDto in memberDtos)
     {
-        if (filesByMemberId.TryGetValue(memberDto.Id, out var files))
+        if (filesByMemberId.TryGetValue(memberDto.Id, out var metas))
         {
-            var fileDtos = _mapper.Map<List<MemberFileDto>>(files);
-            memberDto.MemberFiles = fileDtos ?? new List<MemberFileDto>();
+            memberDto.MemberFiles = metas.Select(f => new MemberFileDto
+            {
+                Id = f.Id.ToString(),
+                FileName = f.FileName,
+                Size = f.Size,
+                MemberId = f.MemberId,
+                FileDescription = f.FileDescription ?? string.Empty,
+                PaymentId = f.PaymentId ?? string.Empty,
+                FileType = Path.GetExtension(f.FileName),
+                DownloadUrl = $"/api/members/file/{f.Id}"
+            }).ToList();
         }
         else
         {
             memberDto.MemberFiles = new List<MemberFileDto>();
         }
     }
-
-    Console.WriteLine($"GetMemberList: Returned {memberDtos.Count} members, total {allMemberFiles.Count} files across all members");
 
     return Result<List<MemberDto>>.Success(memberDtos);
         }
