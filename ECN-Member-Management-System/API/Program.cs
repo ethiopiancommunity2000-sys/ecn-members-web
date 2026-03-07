@@ -67,36 +67,27 @@ if (!string.IsNullOrEmpty(envOrigins))
 // Remove duplicates and filter empty strings
 var allowedOrigins = corsOrigins.Where(o => !string.IsNullOrWhiteSpace(o)).Distinct().ToArray();
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(CorsPolicyName, policy =>
-//         policy.WithOrigins(allowedOrigins)
-//               .AllowAnyHeader()
-//               .AllowAnyMethod()
-//               .AllowCredentials());
-// });
-
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(CorsPolicyName, policy =>
-//         policy.WithOrigins(
-//             "http://localhost:3000",
-//             "https://localhost:3000",
-//             "https://YOUR_WEB_APP_NAME.azurestaticapps.net"  // Add this
-//         )
-//         .AllowAnyHeader()
-//         .AllowAnyMethod()
-//         .AllowCredentials());
-// });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(CorsPolicyName, policy =>
-        policy.WithOrigins(allowedOrigins.Length > 0 ? allowedOrigins : new[] { "http://localhost:3000" })
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials());
+        policy.WithOrigins(
+            "http://localhost:3000",
+            "https://localhost:3000",
+            "https://ambitious-ocean-0108a421e.1.azurestaticapps.net"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
 });
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(CorsPolicyName, policy =>
+//         policy.WithOrigins(allowedOrigins.Length > 0 ? allowedOrigins : new[] { "http://localhost:3000" })
+//             .AllowAnyHeader()
+//             .AllowAnyMethod()
+//             .AllowCredentials());
+// });
 
 
 
