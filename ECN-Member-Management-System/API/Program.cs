@@ -19,6 +19,18 @@ const string CorsPolicyName = "CorsPolicy";
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Fail fast with a clear message if required config is missing (common cause of 500.30 on Azure)
+var connectionString = builder.Configuration.GetConnectionString("ECNMembersConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    var env = builder.Environment.EnvironmentName;
+    throw new InvalidOperationException(
+        "Connection string 'ECNMembersConnection' is missing. " +
+        "In Azure App Service, set Configuration > Application settings: " +
+        "ConnectionStrings__ECNMembersConnection = your SQL connection string. " +
+        $"Current environment: {env}");
+}
+
 builder.Services
     .AddControllers()
     .AddJsonOptions(opts =>
@@ -31,7 +43,7 @@ builder.Services
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("ECNMembersConnection"),
+        connectionString,
         sql => sql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 // Get allowed origins from configuration (for Azure deployment)
