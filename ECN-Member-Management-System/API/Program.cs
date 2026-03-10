@@ -67,29 +67,29 @@ if (!string.IsNullOrEmpty(envOrigins))
 // Remove duplicates and filter empty strings
 var allowedOrigins = corsOrigins.Where(o => !string.IsNullOrWhiteSpace(o)).Distinct().ToArray();
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(CorsPolicyName, policy =>
-//         policy.WithOrigins(
-//             "http://localhost:3000",
-//             "https://localhost:3000",
-//             "https://ambitious-ocean-0108a421e.1.azurestaticapps.net"
-//         )
-//         .AllowAnyHeader()
-//         .AllowAnyMethod()
-//         .AllowCredentials());
-// });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(CorsPolicyName, policy =>
         policy.WithOrigins(
             "http://localhost:3000",
+            "https://localhost:3000",
             "https://ambitious-ocean-0108a421e.1.azurestaticapps.net"
         )
         .AllowAnyHeader()
-        .AllowAnyMethod());
+        .AllowAnyMethod();
+      //  .AllowCredentials());
 });
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(CorsPolicyName, policy =>
+//         policy.WithOrigins(
+//             "http://localhost:3000",
+//             "https://ambitious-ocean-0108a421e.1.azurestaticapps.net"
+//         )
+//         .AllowAnyHeader()
+//         .AllowAnyMethod());
+// });
 
  
 
