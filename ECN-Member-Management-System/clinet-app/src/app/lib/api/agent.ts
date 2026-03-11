@@ -34,7 +34,9 @@ axios.interceptors.request.use(
     }
 
     const token = localStorage.getItem("jwt");
-    const isPublic = config.url?.includes("/account/login");
+    const isPublic =
+                config.url?.includes("/account/login") ||
+                config.url?.includes("/account/create");
 
     if (token && !isPublic) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -60,10 +62,15 @@ axios.interceptors.response.use(
 
     switch (status) {
       case 400:
-        if (data?.errors) {
-          throw Object.values(data.errors).flat();
-        }
-        break;
+              if (data?.errors) {
+                return Promise.reject(Object.values(data.errors).flat().join(", "));
+              }
+
+              if (data?.error) {
+                return Promise.reject(data.error);
+              }
+
+              break;
 
       case 401:
         localStorage.removeItem("jwt");
@@ -123,6 +130,7 @@ const Members = {
 
   details: (id: string) =>
     requests.get<Member>(`/members/${id}`),
+
 
   // Create member (with optional initial receipt files)
   create: (member: Member, files: File[] = []) =>
