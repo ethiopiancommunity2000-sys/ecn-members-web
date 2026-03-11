@@ -148,7 +148,7 @@ const DetailDisplay = () => {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Number of Event</TableCell>
+                  <TableCell>Event Number</TableCell>
                   <TableCell>Incident Date</TableCell>
                   <TableCell>Payment Amount</TableCell>
                   <TableCell>Date of Payment</TableCell>
