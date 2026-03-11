@@ -474,24 +474,24 @@ const MemberList = function ({ members }: Props) {
               </Table>
 
               <Box>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleNavigateHome}
-                  sx={{
-                    width: "15%",
-                    letterSpacing: "5px",
-                    mb: 2,
-                    mt: 2,
-                    ml: 2,
-                    fontSize: "1.5rem",
-                    backgroundColor: "#1976d2",
-                    color: "white",
-                    "&:hover": { backgroundColor: "#115293" },
-                  }}
-                >
-                  Home
-                </Button>
+                             <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNavigateHome}
+                      sx={{
+                        width: "15%",
+                        letterSpacing: "5px",
+                        mb: 2,
+                        mt: 2,
+                        ml: 2,
+                        fontSize: { xs: "12px", sm: "12px", md: "1.5rem" },
+                        backgroundColor: "#1976d2",
+                        color: "white",
+                        "&:hover": { backgroundColor: "#115293" },
+                      }}
+                    >
+                      Home
+                    </Button>
 
                 <TablePagination
                   sx={{
