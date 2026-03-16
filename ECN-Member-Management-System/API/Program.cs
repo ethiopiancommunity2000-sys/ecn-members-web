@@ -76,7 +76,7 @@ builder.Services.AddCors(options =>
             "https://ambitious-ocean-0108a421e.1.azurestaticapps.net"
         )
         .AllowAnyHeader()
-        .AllowAnyMethod();
+        .AllowAnyMethod());
       //  .AllowCredentials());
 });
 

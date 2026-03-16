@@ -22,9 +22,11 @@ const NavBar = observer(function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleMenuOpen = (event) => {
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>)  => {
     setAnchorEl(event.currentTarget);
   };
 
